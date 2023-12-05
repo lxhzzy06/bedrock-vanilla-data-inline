@@ -31,7 +31,7 @@ jobs:
 
     - name: Set module
       run: | 
-        mkdir /pkg
+        mkdir pkg
         npm i @minecraft/vanilla-data@${{ inputs.version }}
         cp -r /node_modules/@minecraft/vanilla-data/ /pkg/
 
