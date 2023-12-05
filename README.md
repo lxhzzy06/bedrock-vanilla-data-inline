@@ -1,0 +1,1 @@
+# bedrock-vanilla-data-inline
