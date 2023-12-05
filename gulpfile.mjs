@@ -5,7 +5,10 @@ import jeditor from 'gulp-json-editor';
 import replace from 'gulp-replace';
 
 function change_file_ext() {
-	return gulp.src('pkg/lib/*.d.ts').pipe(rename((path) => (path.basename = path.basename.replace('.d', ''))));
+	return gulp
+		.src('pkg/lib/*.d.ts', { base: '.' })
+		.pipe(rename((path) => (path.basename = path.basename.replace('.d', ''))))
+		.pipe(gulp.dest('.'));
 }
 
 function delete_file() {
@@ -13,14 +16,17 @@ function delete_file() {
 }
 
 function editor(path, mergeWith) {
-	return gulp.src(path, { base: '.' }).pipe(jeditor(mergeWith)).pipe(gulp.dest('.'));
+	return gulp
+		.src(path, { base: '.' })
+		.pipe(jeditor(mergeWith, {}, { arrayMerge: (_, sourceArray) => sourceArray }))
+		.pipe(gulp.dest('.'));
 }
 
 function edit_package() {
 	return editor('pkg/package.json', {
 		name: 'bedrock-vanilla-data-inline',
 		description: '',
-		contributors: [{ name: 'lxhzzy', email: 'lxhzzy@outlook.com' }],
+		contributors: [{ name: 'lxhzzy06', email: 'lxhzzy@outlook.com' }],
 		types: undefined,
 		exports: './lib/index.ts'
 	});
