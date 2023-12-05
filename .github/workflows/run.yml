@@ -39,6 +39,7 @@ jobs:
       run: gulp
 
     - name: Publish
+      working-directory: pkg
       run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
