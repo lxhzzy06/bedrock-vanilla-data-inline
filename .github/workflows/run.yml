@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "The version of @minecraft/vanill-data module"
+        description: "The version of @minecraft/vanilla-data module"
         required: true
         type: string
 
@@ -17,7 +17,8 @@ jobs:
         working-directory: ./pkg
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Check out
+      uses: actions/checkout@v4
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -30,9 +31,12 @@ jobs:
       run: npm ci
 
     - name: Set module
-      run: npm i @minecraft/vanilla-data@${{ inputs.version }}
+      run: | 
+        mkdir /pkg
+        npm i @minecraft/vanilla-data@${{ inputs.version }}
+        cp -r /node_modules/@minecraft/vanilla-data/* /pkg/
 
-    - name: Run task
+    - name: Gulp
       run: gulp
 
     - name: Publish
