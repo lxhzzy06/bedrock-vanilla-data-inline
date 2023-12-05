@@ -14,7 +14,6 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./pkg
 
     steps:
     - name: Check out
@@ -32,9 +31,9 @@ jobs:
 
     - name: Set module
       run: | 
-        mkdir /pkg
+        mkdir /pkg/
         npm i @minecraft/vanilla-data@${{ inputs.version }}
-        cp -r /node_modules/@minecraft/vanilla-data/* /pkg/
+        cp -r /node_modules/@minecraft/vanilla-data/ /pkg/
 
     - name: Gulp
       run: gulp
