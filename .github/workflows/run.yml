@@ -33,7 +33,7 @@ jobs:
       run: | 
         mkdir pkg
         npm i @minecraft/vanilla-data@${{ inputs.version }}
-        cp -r node_modules/@minecraft/vanilla-data/* /pkg/
+        cp -r node_modules/@minecraft/vanilla-data/* pkg
 
     - name: Gulp
       run: gulp
