@@ -15,21 +15,27 @@ function delete_file() {
 	return deleteAsync(['pkg/lib/*.{d.ts,js}']);
 }
 
-function editor(path, mergeWith) {
+function edit_package() {
 	return gulp
-		.src(path, { base: '.' })
-		.pipe(jeditor(mergeWith, {}, { arrayMerge: (_, sourceArray) => sourceArray }))
+		.src('pkg/package.json', { base: '.' })
+		.pipe(
+			jeditor(
+				{
+					name: 'bedrock-vanilla-data-inline',
+					description: 'Make the @minecraft/vanilla-data declared enumerations convert to constant enumerations.',
+					contributors: [{ name: 'lxhzzy06', email: 'lxhzzy@outlook.com' }],
+					types: undefined,
+					exports: './lib/index.ts'
+				},
+				{},
+				{ arrayMerge: (_, sourceArray) => sourceArray }
+			)
+		)
 		.pipe(gulp.dest('.'));
 }
 
-function edit_package() {
-	return editor('pkg/package.json', {
-		name: 'bedrock-vanilla-data-inline',
-		description: '',
-		contributors: [{ name: 'lxhzzy06', email: 'lxhzzy@outlook.com' }],
-		types: undefined,
-		exports: './lib/index.ts'
-	});
+export function set_README() {
+	return gulp.src('README.md').pipe(gulp.dest('pkg', { overwrite: true }));
 }
 
 function set_constant_enum() {
@@ -39,4 +45,4 @@ function set_constant_enum() {
 		.pipe(gulp.dest('.'));
 }
 
-export default gulp.series(edit_package, change_file_ext, delete_file, set_constant_enum);
+export default gulp.series(edit_package, change_file_ext, delete_file, set_constant_enum, set_README);
