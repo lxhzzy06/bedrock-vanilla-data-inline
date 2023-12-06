@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "The version (or tag) of @minecraft/vanilla-data module that will be installed"
+        description: "The version (or tag) of the @minecraft/vanilla-data module that will be installed"
         required: true
         type: string
 
