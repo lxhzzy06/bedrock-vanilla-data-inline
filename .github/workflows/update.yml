@@ -1,0 +1,15 @@
+name: Update
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+
+jobs:
+  latest:
+    uses: ./.github/workflows/run.yml
+
+  preview:
+    uses: ./.github/workflows/run.yml
+    with:
+      version: 'preview'
+      tag: 'preview'

@@ -1,11 +1,31 @@
 name: Run
 
 on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'The version (or tag) of the @minecraft/vanilla-data module that will be installed.'
+        required: false
+        type: string
+        default: 'latest'
+
+      tag:
+        description: 'Create the publishing tag.'
+        required: false
+        type: string
+        default: 'latest'
+
   workflow_dispatch:
     inputs:
       version:
-        description: "The version (or tag) of the @minecraft/vanilla-data module that will be installed"
-        required: true
+        description: 'The version (or tag) of the @minecraft/vanilla-data module that will be installed.'
+        required: false
+        type: string
+        default: 'latest'
+
+      tag:
+        description: 'Create the publishing tag.'
+        required: false
         type: string
         default: 'latest'
 
@@ -17,30 +37,35 @@ jobs:
         shell: bash
 
     steps:
-    - name: Check out
-      uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+          registry-url: 'https://registry.npmjs.org'
 
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version-file: .node-version
-        cache: npm
-        registry-url: 'https://registry.npmjs.org'
+      - name: Check version
+        id: check
+        continue-on-error: true
+        run: if [[ $(npm view bedrock-vanilla-data-inline versions) =~ "'$(npm view @minecraft/vanilla-data version)'" ]]; then echo "::error ::version has been published" exit 1; fi
 
-    - name: Install Dependencies
-      run: npm ci
+      - name: Check out
+        if: ${{ steps.check.outcome == 'success' }}
+        uses: actions/checkout@v4
 
-    - name: Set module
-      run: | 
-        mkdir pkg
-        npm i @minecraft/vanilla-data@${{ inputs.version }}
-        cp -r node_modules/@minecraft/vanilla-data/* pkg
+      - name: Install Dependencies
+        if: ${{ steps.check.outcome == 'success' }}
+        run: |
+          npm ci
+          mkdir pkg
+          npm i @minecraft/vanilla-data@${{ inputs.version }}
+          cp -r node_modules/@minecraft/vanilla-data/* pkg
 
-    - name: Gulp
-      run: gulp
-
-    - name: Publish
-      working-directory: pkg
-      run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Build and Publish
+        if: ${{ steps.check.outcome == 'success' }}
+        working-directory: pkg
+        run: |
+          gulp  
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
