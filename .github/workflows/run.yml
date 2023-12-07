@@ -60,7 +60,7 @@ jobs:
         run: |
           npm ci
           mkdir pkg
-          npm i @minecraft/vanilla-data@${{ inputs.version }}
+          npm i @minecraft/vanilla-data@${{ inputs.tag }}
           cp -r node_modules/@minecraft/vanilla-data/* pkg
 
       - name: Build and Publish
