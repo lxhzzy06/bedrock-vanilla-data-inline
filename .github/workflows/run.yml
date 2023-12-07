@@ -37,6 +37,9 @@ jobs:
         shell: bash
 
     steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -48,10 +51,6 @@ jobs:
         id: check
         continue-on-error: true
         run: if [[ $(npm view bedrock-vanilla-data-inline versions) =~ "'$(npm view @minecraft/vanilla-data version)'" ]]; then echo "::error ::version has been published" exit 1; fi
-
-      - name: Check out
-        if: ${{ steps.check.outcome == 'success' }}
-        uses: actions/checkout@v4
 
       - name: Install Dependencies
         if: ${{ steps.check.outcome == 'success' }}
