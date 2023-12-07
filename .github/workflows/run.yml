@@ -4,13 +4,13 @@ on:
   workflow_call:
     inputs:
       version:
-        description: 'The version (or tag) of the @minecraft/vanilla-data module that will be installed.'
+        description: 'The version (or tag) of the @minecraft/vanilla-data module that will be installed'
         required: false
         type: string
         default: 'latest'
 
       tag:
-        description: 'Create the publishing tag.'
+        description: 'Create the publishing tag'
         required: false
         type: string
         default: 'latest'
@@ -18,15 +18,18 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'The version (or tag) of the @minecraft/vanilla-data module that will be installed.'
+        description: 'The version (or tag) of the @minecraft/vanilla-data module that will be installed'
         required: false
         type: string
         default: 'latest'
 
       tag:
-        description: 'Create the publishing tag.'
+        description: 'Create the publishing tag'
         required: false
-        type: string
+        type: choice
+        options:
+          - latest
+          - preview
         default: 'latest'
 
 jobs:
@@ -50,7 +53,7 @@ jobs:
       - name: Check version
         id: check
         continue-on-error: true
-        run: if [[ $(npm view bedrock-vanilla-data-inline versions) =~ "'$(npm view @minecraft/vanilla-data version)'" ]]; then exit 1; fi
+        run: if [[ $(npm view bedrock-vanilla-data-inline versions) =~ "'$(npm view @minecraft/vanilla-data@${{ inputs.version }} version)'" ]]; then exit 1; fi
 
       - name: Install Dependencies
         if: ${{ steps.check.outcome == 'success' }}
