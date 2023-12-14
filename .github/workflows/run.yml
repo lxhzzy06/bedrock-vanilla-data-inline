@@ -60,7 +60,7 @@ jobs:
         run: |
           npm ci
           mkdir pkg
-          npm i @minecraft/vanilla-data@${{ inputs.tag }}
+          npm i @minecraft/vanilla-data@${{ inputs.version }}
           cp -r node_modules/@minecraft/vanilla-data/* pkg
 
       - name: Gulp
@@ -69,6 +69,6 @@ jobs:
       - name: Publish
         if: ${{ steps.check.outcome == 'success' }}
         working-directory: pkg
-        run: npm publish
+        run: npm publish --tag ${{ inputs.tag }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
