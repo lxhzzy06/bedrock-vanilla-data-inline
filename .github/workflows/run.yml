@@ -64,6 +64,7 @@ jobs:
           cp -r node_modules/@minecraft/vanilla-data/* pkg
 
       - name: Gulp
+        if: ${{ steps.check.outcome == 'success' }}
         run: gulp
   
       - name: Publish
