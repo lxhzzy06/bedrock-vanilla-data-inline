@@ -2,14 +2,16 @@ name: Update
 
 on:
   schedule:
-    - cron: '13 22 * * *'
+    - cron: '5 * * * *'
 
 jobs:
   latest:
     uses: ./.github/workflows/run.yml
+    secrets: inherit
 
   preview:
     uses: ./.github/workflows/run.yml
+    secrets: inherit
     with:
       version: 'preview'
       tag: 'preview'
