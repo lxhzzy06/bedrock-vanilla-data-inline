@@ -48,7 +48,7 @@ jobs:
         with:
           node-version-file: .node-version
           cache: npm
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: 'https://registry.npmjs.org/'
 
       - name: Check version
         id: check
@@ -60,7 +60,7 @@ jobs:
         run: |
           npm ci
           mkdir pkg
-          npm i @minecraft/vanilla-data@${{ inputs.tag }}
+          npm i @minecraft/vanilla-data@${{ inputs.version }}
           cp -r node_modules/@minecraft/vanilla-data/* pkg
           gh repo clone Mojang/bedrock-samples
 
