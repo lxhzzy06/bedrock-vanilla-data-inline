@@ -47,7 +47,7 @@ function set_constant_enum() {
 }
 
 function add_textures() {
-	return gulp.src('pkg/lib/index.ts', { base: '.' }).pipe(footer('export * from "./MinecraftBlocktextures";')).pipe(gulp.dest('.'))
+	return gulp.src('pkg/lib/index.ts', { base: '.' }).pipe(footer('export * from "./MinecraftBlocktextures";')).pipe(gulp.dest('.'));
 }
 
 export default gulp.series(edit_package, change_file_ext, delete_file, set_constant_enum, add_textures, set_README);

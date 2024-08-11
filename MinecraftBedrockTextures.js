@@ -1,6 +1,9 @@
-const { writeFileSync } = require('fs');
-const blocks = require('bedrock-samples/resource_pack/blocks.json');
-const tt = require('bedrock-samples/resource_pack/textures/terrain_texture.json').texture_data;
+import { writeFileSync, readFileSync } from 'fs';
+import blocks from './bedrock-samples/resource_pack/blocks.json' assert { type: 'json' };
+const lines = readFileSync('./bedrock-samples/resource_pack/textures/terrain_texture.json', 'utf-8').split('\n');
+lines.shift();
+const tt = JSON.parse(lines.join('\n')).texture_data;
+
 
 function tex(s) {
 	const t = tt[s]?.textures;
