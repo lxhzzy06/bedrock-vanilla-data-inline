@@ -3,6 +3,7 @@ import { deleteAsync } from 'del';
 import rename from 'gulp-rename';
 import jeditor from 'gulp-json-editor';
 import replace from 'gulp-replace';
+import footer from 'gulp-footer';
 
 function change_file_ext() {
 	return gulp
@@ -45,4 +46,8 @@ function set_constant_enum() {
 		.pipe(gulp.dest('.'));
 }
 
-export default gulp.series(edit_package, change_file_ext, delete_file, set_constant_enum, set_README);
+function add_textures() {
+	return gulp.src('pkg/lib/index.ts', { base: '.' }).pipe(footer('export * from "./MinecraftBlocktextures";')).pipe(gulp.dest('.'))
+}
+
+export default gulp.series(edit_package, change_file_ext, delete_file, set_constant_enum, add_textures, set_README);
