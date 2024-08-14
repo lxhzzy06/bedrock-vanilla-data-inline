@@ -63,6 +63,8 @@ jobs:
           npm i @minecraft/vanilla-data@${{ inputs.version }}
           cp -r node_modules/@minecraft/vanilla-data/* pkg
           gh repo clone Mojang/bedrock-samples
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Publish
         if: ${{ steps.check.outcome == 'success' }}
