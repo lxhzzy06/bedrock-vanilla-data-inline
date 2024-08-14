@@ -2,14 +2,14 @@
 
 将 @minecraft/vanilla-data 声明的枚举转换为常量枚举。
 
-- 缩小包体积
+- 缩小捆绑打包体积
 - 提高性能（未确认）
 
 提供来自 bedrock-samples 仓库的方块纹理路径。
 
 安装：`npm i bedrock-vanilla-data-inline`
 
-此包利用 GitHub Actions 进行自动化构建和发布，确保始终可用最新版本。
+此包利用 GitHub Actions 进行自动化构建和发布，确保最新版本始终可用。
 
 链接：https://www.npmjs.com/package/bedrock-vanilla-data-inline
 
