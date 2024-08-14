@@ -5,7 +5,7 @@
 - 缩小包体积
 - 提高性能（未确认）
 
-提供来自 bedrock-samples 仓库的区块纹理路径。
+提供来自 bedrock-samples 仓库的方块纹理路径。
 
 安装：`npm i bedrock-vanilla-data-inline`
 
