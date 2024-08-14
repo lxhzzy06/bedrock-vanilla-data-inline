@@ -51,7 +51,7 @@ function add_textures() {
 	return gulp.src('pkg/lib/index.ts', { base: '.' }).pipe(footer('export * from "./MinecraftBlocktextures";')).pipe(gulp.dest('.'));
 }
 
-function generate_block_textures() {
+async function generate_block_textures() {
 	const blocks = JSON.parse(readFileSync('./bedrock-samples/resource_pack/blocks.json', 'utf-8'));
 	const lines = readFileSync('./bedrock-samples/resource_pack/textures/terrain_texture.json', 'utf-8').split('\n');
 	lines.shift();
