@@ -70,8 +70,7 @@ jobs:
         if: ${{ steps.check.outcome == 'success' }}
         working-directory: pkg
         run: |
-          gulp 
-          node MinecraftBedrockTextures.js
+          gulp
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
