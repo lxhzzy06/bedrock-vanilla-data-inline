@@ -12,5 +12,8 @@
   },
   "dependencies": {
     "@minecraft/vanilla-data": "^1.21.3"
+  },
+  "repository": {
+    "url": "https://github.com/lxhzzy06/bedrock-vanilla-data-inline"
   }
 }
