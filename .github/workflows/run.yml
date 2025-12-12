@@ -59,6 +59,9 @@ jobs:
         continue-on-error: true
         run: if [[ $(npm view bedrock-vanilla-data-inline versions) =~ "'$(npm view @minecraft/vanilla-data@${{ inputs.version }} version)'" ]]; then exit 1; fi
 
+      - name: Update npm
+        run: npm install -g npm@latest
+
       - name: Install Dependencies
         if: ${{ steps.check.outcome == 'success' }}
         run: |
