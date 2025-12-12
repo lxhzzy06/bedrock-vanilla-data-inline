@@ -1,36 +1,40 @@
 name: Run
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
   workflow_call:
     inputs:
       version:
-        description: 'The version (or tag) of the @minecraft/vanilla-data module that will be installed'
+        description: "The version (or tag) of the @minecraft/vanilla-data module that will be installed"
         required: false
         type: string
-        default: 'latest'
+        default: "latest"
 
       tag:
-        description: 'Create the publishing tag'
+        description: "Create the publishing tag"
         required: false
         type: string
-        default: 'latest'
+        default: "latest"
 
   workflow_dispatch:
     inputs:
       version:
-        description: 'The version (or tag) of the @minecraft/vanilla-data module that will be installed'
+        description: "The version (or tag) of the @minecraft/vanilla-data module that will be installed"
         required: false
         type: string
-        default: 'latest'
+        default: "latest"
 
       tag:
-        description: 'Create the publishing tag'
+        description: "Create the publishing tag"
         required: false
         type: choice
         options:
           - latest
           - preview
-        default: 'latest'
+        default: "latest"
 
 jobs:
   Run:
@@ -48,7 +52,7 @@ jobs:
         with:
           node-version-file: .node-version
           cache: npm
-          registry-url: 'https://registry.npmjs.org/'
+          registry-url: "https://registry.npmjs.org/"
 
       - name: Check version
         id: check
@@ -72,5 +76,3 @@ jobs:
         run: |
           gulp
           npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
