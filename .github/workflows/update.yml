@@ -1,16 +1,54 @@
 name: Update
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
-  schedule:
-    - cron: '0 18 * * *'
+  workflow_call:
+    inputs:
+      version:
+        description: "The version (or tag) of the @minecraft/vanilla-data module that will be installed"
+        required: false
+        type: string
+        default: "latest"
+
+      tag:
+        description: "Create the publishing tag"
+        required: false
+        type: string
+        default: "latest"
+
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "The version (or tag) of the @minecraft/vanilla-data module that will be installed"
+        required: false
+        type: string
+        default: "latest"
+
+      tag:
+        description: "Create the publishing tag"
+        required: false
+        type: choice
+        options:
+          - latest
+          - preview
+        default: "latest"
 
 jobs:
   latest:
     uses: ./.github/workflows/run.yml
+    permissions:
+      id-token: write
+      contents: read
     secrets: inherit
 
   preview:
     uses: ./.github/workflows/run.yml
+    permissions:
+      id-token: write
+      contents: read
     secrets: inherit
     with:
       version: 'preview'
