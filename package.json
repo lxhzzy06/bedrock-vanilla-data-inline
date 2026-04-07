@@ -1,17 +1,15 @@
 {
   "private": true,
   "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test --test-reporter=tap"
+  },
   "devDependencies": {
-    "del": "^7.1.0",
-    "eslint": "^8.55.0",
-    "gulp": "^5.0.1",
-    "gulp-footer": "^2.1.0",
-    "gulp-json-editor": "^2.5.7",
-    "gulp-rename": "^2.0.0",
-    "gulp-replace": "^1.1.4"
+    "eslint": "^8.55.0"
   },
   "dependencies": {
-    "@minecraft/vanilla-data": "^1.21.3"
+    "@minecraft/vanilla-data": "^1"
   },
   "repository": {
     "url": "https://github.com/lxhzzy06/bedrock-vanilla-data-inline"

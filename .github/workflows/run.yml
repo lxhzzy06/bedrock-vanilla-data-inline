@@ -77,5 +77,5 @@ jobs:
         if: ${{ steps.check.outcome == 'success' }}
         working-directory: pkg
         run: |
-          gulp
+          node ../build.mjs
           npm publish

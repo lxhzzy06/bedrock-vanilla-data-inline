@@ -1,4 +1,6 @@
 pkg/
+bedrock-samples/
+.trae/
 
 # Logs
 logs
