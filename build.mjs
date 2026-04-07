@@ -1,7 +1,8 @@
 import { writeFileSync, readFileSync, rmSync, renameSync, readdirSync, copyFileSync, existsSync, mkdirSync } from "fs";
 import { join, basename } from "path";
 
-const pkgDir = "pkg";
+const isRunningInPkgDir = existsSync("package.json") && existsSync("lib");
+const pkgDir = isRunningInPkgDir ? "." : "pkg";
 const libDir = join(pkgDir, "lib");
 
 const SATURATION_MODIFIER_MAP = {
@@ -78,15 +79,17 @@ function addTextures() {
 }
 
 function copyReadme() {
-  if (existsSync("README.md")) {
-    copyFileSync("README.md", join(pkgDir, "README.md"));
+  const readmeSource = isRunningInPkgDir ? "../README.md" : "README.md";
+  if (existsSync(readmeSource)) {
+    copyFileSync(readmeSource, join(pkgDir, "README.md"));
     console.log("✓ Copied README.md");
   }
 }
 
 function generateBlockTextures() {
-  const blocksPath = "./bedrock-samples/resource_pack/blocks.json";
-  const texturesPath = "./bedrock-samples/resource_pack/textures/terrain_texture.json";
+  const bedrockSamplesDir = isRunningInPkgDir ? "../bedrock-samples" : "./bedrock-samples";
+  const blocksPath = join(bedrockSamplesDir, "resource_pack/blocks.json");
+  const texturesPath = join(bedrockSamplesDir, "resource_pack/textures/terrain_texture.json");
   
   if (!existsSync(blocksPath) || !existsSync(texturesPath)) {
     console.log("⚠ Skipping block textures generation (bedrock-samples not found)");
@@ -146,7 +149,8 @@ function generateBlockTextures() {
 }
 
 function generateFoodData() {
-  const itemsDir = "./bedrock-samples/behavior_pack/items";
+  const bedrockSamplesDir = isRunningInPkgDir ? "../bedrock-samples" : "./bedrock-samples";
+  const itemsDir = join(bedrockSamplesDir, "behavior_pack/items");
   
   if (!existsSync(itemsDir)) {
     console.log("⚠ Skipping food data generation (bedrock-samples not found)");
@@ -225,6 +229,10 @@ function generateFoodData() {
 }
 
 function checkPrerequisites() {
+  if (isRunningInPkgDir) {
+    return;
+  }
+  
   if (!existsSync(pkgDir)) {
     console.error("Error: 'pkg' directory not found.");
     console.error("\nPlease run the following commands first:");
