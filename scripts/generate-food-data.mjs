@@ -1,19 +1,19 @@
-import { readdirSync, readFileSync, writeFileSync } from "fs";
-import { join } from "path";
+import { readdirSync, readFileSync, writeFileSync } from 'fs';
+import { join } from 'path';
 
-const itemsDir = "./bedrock-samples/behavior_pack/items";
-const outputPath = "./pkg/lib/MinecraftFoodData.ts";
+const itemsDir = './bedrock-samples/behavior_pack/items';
+const outputPath = './pkg/lib/MinecraftFoodData.ts';
 
 const SATURATION_MODIFIER_MAP = {
   poor: 0.1,
   low: 0.3,
   normal: 0.6,
   good: 0.8,
-  supernatural: 1.2,
+  supernatural: 1.2
 };
 
 function getSaturationModifierValue(modifier) {
-  if (typeof modifier === "number") {
+  if (typeof modifier === 'number') {
     return modifier;
   }
   return SATURATION_MODIFIER_MAP[modifier] ?? 0;
@@ -24,39 +24,53 @@ function calculateQuality(nutrition, saturationModifier) {
 }
 
 function extractFoodData() {
-  const files = readdirSync(itemsDir).filter(f => f.endsWith(".json"));
+  const files = readdirSync(itemsDir).filter((f) => f.endsWith('.json'));
   const foodItems = [];
 
   for (const file of files) {
     const filePath = join(itemsDir, file);
     let content;
     try {
-      let raw = readFileSync(filePath, "utf-8");
-      raw = raw.replace(/\/\/.*$/gm, "").replace(/\/\*[\s\S]*?\*\//g, "");
+      let raw = readFileSync(filePath, 'utf-8');
+      raw = raw.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
       content = JSON.parse(raw);
     } catch (e) {
       continue;
     }
-    
-    const item = content["minecraft:item"];
+
+    const item = content['minecraft:item'];
     if (!item) continue;
-    
+
     const components = item.components;
     if (!components) continue;
-    
-    const food = components["minecraft:food"];
+
+    const food = components['minecraft:food'];
     if (!food) continue;
-    
-    const identifier = item.description?.identifier || `minecraft:${file.replace(".json", "")}`;
+
+    let identifier = item.description.identifier;
+
+    switch (identifier) {
+      case 'minecraft:appleEnchanted':
+        identifier = 'minecraft:enchanted_golden_apple';
+        break;
+      case 'minecraft:muttonCooked':
+        identifier = 'minecraft:cooked_mutton';
+        break;
+      case 'minecraft:muttonRaw':
+        identifier = 'minecraft:mutton';
+        break;
+    }
+    console.log(identifier);
+
     const nutrition = food.nutrition ?? 0;
     const saturationModifier = getSaturationModifierValue(food.saturation_modifier);
     const quality = calculateQuality(nutrition, saturationModifier);
-    
+
     foodItems.push({
       identifier,
       nutrition,
       saturation_modifier: saturationModifier,
-      quality: Math.round(quality * 100) / 100,
+      quality: Math.round(quality * 100) / 100
     });
   }
 
@@ -71,17 +85,19 @@ function generateTypeScript(foodItems) {
     `  quality: number;`,
     `}`,
     ``,
-    `export const MinecraftFoodData: Record<string, MinecraftFoodDataEntry> = {`,
+    `export const MinecraftFoodData: Record<string, MinecraftFoodDataEntry> = {`
   ];
 
   for (const item of foodItems) {
-    lines.push(`  "${item.identifier}": { nutrition: ${item.nutrition}, saturation_modifier: ${item.saturation_modifier}, quality: ${item.quality} },`);
+    lines.push(
+      `  "${item.identifier}": { nutrition: ${item.nutrition}, saturation_modifier: ${item.saturation_modifier}, quality: ${item.quality} },`
+    );
   }
 
-  lines.push("};");
-  lines.push("");
+  lines.push('};');
+  lines.push('');
 
-  return lines.join("\n");
+  return lines.join('\n');
 }
 
 const foodItems = extractFoodData();
@@ -91,7 +107,7 @@ const tsContent = generateTypeScript(foodItems);
 writeFileSync(outputPath, tsContent);
 
 console.log(`Generated: ${outputPath}`);
-console.log("\nFood items:");
-foodItems.forEach(item => {
+console.log('\nFood items:');
+foodItems.forEach((item) => {
   console.log(`  ${item.identifier}: nutrition=${item.nutrition}, saturation=${item.saturation_modifier}, quality=${item.quality}`);
 });
